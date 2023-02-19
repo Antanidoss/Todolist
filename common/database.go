@@ -2,15 +2,18 @@ package common
 
 import (
 	"database/sql"
+	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	_ "github.com/denisenkom/go-mssqldb"
 	"github.com/joho/godotenv"
-
 )
 
 var DB *sql.DB
+
+const providerName = "sqlserver"
 
 func Init() *sql.DB {
 	envErr := godotenv.Load()
@@ -18,28 +21,30 @@ func Init() *sql.DB {
 		panic("Error loading credentials: %v" + envErr.Error())
 	}
 
-	// var (
-	// 	user     = os.Getenv("MSSQL_DB_USER")
-	// 	database = os.Getenv("MSSQL_DB_DATABASE")
-	// )
+	server := os.Getenv("MSSQL_DB_SERVER")
+	sqlServerConnectionString := fmt.Sprintf("odbc:server=%s", server)
 
-	// connectionString := fmt.Sprintf("user id=%s;database=%s", user, database)
-
-	db, err := sql.Open("mssql", "./CreateDB.sql")
+	db, err := sql.Open(providerName, sqlServerConnectionString)
 
 	if err != nil {
 		panic("db err: (Init) " + err.Error())
 	}
 
-	DB = db
+	createDb(db)
 
-	//createDb()
+	dbName := os.Getenv("MSSQL_DB_NAME")
+	dbConnectionString := fmt.Sprintf("odbc:server=%s;database=%s", server, dbName)
+	DB, err := sql.Open(providerName, dbConnectionString)
+
+	if err != nil {
+		panic("db err: (Init) " + err.Error())
+	}
 
 	return DB
 }
 
-func createDb() {
-	path := filepath.Join("scripts", "CreateDB.sql")
+func createDb(DB *sql.DB) {
+	path := filepath.Join("common", "CreateDB.sql")
 
 	buffer, err := ioutil.ReadFile(path)
 	if err != nil {
