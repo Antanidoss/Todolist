@@ -1,11 +1,7 @@
 package main
 
 import (
-	"context"
-	"io"
-	"log"
-	"net/http"
-	"sync"
+	"github.com/gin-gonic/gin"
 
 	"todolist/common"
 )
@@ -14,22 +10,17 @@ func main() {
 	db := common.Init()
 	defer db.Close()
 
-	srv := &http.Server{Addr: "localhost:8181"}
-	httpServerExitDone := &sync.WaitGroup{}
+	r := gin.Default()
+	addRoutes(r)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, "hello world\n")
-	})
+	r.Run()
+}
 
-	go func() {
-		defer httpServerExitDone.Done() // let main know we are done cleaning up
+func addRoutes(r *gin.Engine) {
+	apiGroup := r.Group("api")
+	todolistGroup := apiGroup.Group("todolist")
 
-		// always returns error. ErrServerClosed on graceful close
-		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
-			// unexpected error. port in use?
-			log.Fatalf("ListenAndServe(): %v", err)
-		}
-	}()
-
-	defer srv.Shutdown(context.TODO())
+	todolistGroup.POST("add", addTodoitem)
+	todolistGroup.PUT("update", addTodoitem)
+	todolistGroup.POST("get", addTodoitem)
 }
