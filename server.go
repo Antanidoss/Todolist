@@ -20,7 +20,7 @@ func addRoutes(r *gin.Engine) {
 	apiGroup := r.Group("api")
 	todolistGroup := apiGroup.Group("todolist")
 
-	todolistGroup.POST("add", addTodoitem)
-	todolistGroup.PUT("update", addTodoitem)
-	todolistGroup.POST("get", addTodoitem)
+	todolistGroup.POST("/add", AddTodoItem)
+	todolistGroup.PUT("/update", UpdateTodoItem)
+	todolistGroup.GET("/get", GetTodoItemById)
 }
