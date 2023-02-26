@@ -1,0 +1,75 @@
+definitions:
+  model.TodoItem:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /add:
+    post:
+      consumes:
+      - application/json
+      description: adds todolist item
+      parameters:
+      - description: todo item for add
+        in: body
+        name: todoItem
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add todo item
+      tags:
+      - TodoItem
+  /get:
+    get:
+      consumes:
+      - application/json
+      description: gets todolist item
+      parameters:
+      - description: search book by id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TodoItem'
+      summary: Get todo item by id
+      tags:
+      - TodoItem
+  /update:
+    put:
+      consumes:
+      - application/json
+      description: updates todolist item
+      parameters:
+      - description: todo item for update
+        in: body
+        name: todoItem
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update todo item
+      tags:
+      - TodoItem
+swagger: "2.0"
