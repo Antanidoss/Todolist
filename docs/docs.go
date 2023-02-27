@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.TodoItem"
+                            "$ref": "#/definitions/main.addTodoItemDto"
                         }
                     }
                 ],
@@ -62,7 +62,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "search book by id",
+                        "description": "id for search todo item",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -72,7 +72,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.TodoItem"
+                            "$ref": "#/definitions/models.TodoItem"
                         }
                     }
                 }
@@ -98,7 +98,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.TodoItem"
+                            "$ref": "#/definitions/models.TodoItem"
                         }
                     }
                 ],
@@ -111,7 +111,18 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.TodoItem": {
+        "main.addTodoItemDto": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.TodoItem": {
             "type": "object",
             "properties": {
                 "description": {

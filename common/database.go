@@ -41,12 +41,15 @@ func Init() *sql.DB {
 		panic("db err: (Init) %v" + err.Error())
 	}
 
-	createDb(db)
+	createDb(db, dbName)
+
 	DB, err := sql.Open(providerName, dbConnectionString)
 
 	if err != nil {
 		panic("db err: (Init) %v" + err.Error())
 	}
+
+	createDbTables(DB)
 
 	return DB
 }
@@ -67,7 +70,12 @@ func checkDbCreated(dbConnectionString string) (*sql.DB, bool) {
 	return nil, false
 }
 
-func createDb(DB *sql.DB) {
+func createDb(DB *sql.DB, dbName string) {
+	sql := fmt.Sprintf("CREATE DATABASE %s", dbName)
+	DB.Exec(sql)
+}
+
+func createDbTables(DB *sql.DB) {
 	path := filepath.Join("common", "CreateDB.sql")
 
 	buffer, err := ioutil.ReadFile(path)

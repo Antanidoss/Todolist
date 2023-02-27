@@ -1,4 +1,4 @@
-package model
+package models
 
 type TodoItem struct {
 	ID          uint
