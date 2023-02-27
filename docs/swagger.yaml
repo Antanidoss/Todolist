@@ -1,5 +1,12 @@
 definitions:
-  model.TodoItem:
+  main.addTodoItemDto:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  models.TodoItem:
     properties:
       description:
         type: string
@@ -22,7 +29,7 @@ paths:
         name: todoItem
         required: true
         schema:
-          $ref: '#/definitions/model.TodoItem'
+          $ref: '#/definitions/main.addTodoItemDto'
       produces:
       - application/json
       responses:
@@ -37,7 +44,7 @@ paths:
       - application/json
       description: gets todolist item
       parameters:
-      - description: search book by id
+      - description: id for search todo item
         in: path
         name: id
         required: true
@@ -48,7 +55,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.TodoItem'
+            $ref: '#/definitions/models.TodoItem'
       summary: Get todo item by id
       tags:
       - TodoItem
@@ -63,7 +70,7 @@ paths:
         name: todoItem
         required: true
         schema:
-          $ref: '#/definitions/model.TodoItem'
+          $ref: '#/definitions/models.TodoItem'
       produces:
       - application/json
       responses:

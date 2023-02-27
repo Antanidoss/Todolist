@@ -5,29 +5,31 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	_ "todolist/model"
-	"todolist/service"
-
+	_ "todolist/models"
+	"todolist/services"
 )
+
+type addTodoItemDto struct {
+	Name        string
+	Description string
+}
 
 // Add todo item godoc
 // @Summary Add todo item
 // @Schemes
 // @Description adds todolist item
 // @Tags TodoItem
-// @Param todoItem body model.TodoItem true "todo item for add"
+// @Param todoItem body addTodoItemDto true "todo item for add"
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 int
 // @Router /add [post]
 func AddTodoItem(ctx *gin.Context) {
-	var (
-		name        = ctx.Param("name")
-		description = ctx.Param("description")
-	)
+	todoItem := addTodoItemDto{}
+	ctx.ShouldBind(&todoItem)
 
-	todoItemId := service.AddTodoItem(name, description)
-	ctx.Query(strconv.Itoa(todoItemId))
+	todoItemId := services.AddTodoItem(todoItem.Name, todoItem.Description)
+	ctx.Query(strconv.Itoa(int(todoItemId)))
 }
 
 // Update todo item godoc
@@ -35,7 +37,7 @@ func AddTodoItem(ctx *gin.Context) {
 // @Schemes
 // @Description updates todolist item
 // @Tags TodoItem
-// @Param todoItem body model.TodoItem true "todo item for update"
+// @Param todoItem body models.TodoItem true "todo item for update"
 // @Accept json
 // @Produce json
 // @Success 200
@@ -47,7 +49,7 @@ func UpdateTodoItem(ctx *gin.Context) {
 		description = ctx.Param("description")
 	)
 
-	service.UpdateTodoItem(id, name, description)
+	services.UpdateTodoItem(id, name, description)
 }
 
 // Get todo item by id godoc
@@ -58,11 +60,11 @@ func UpdateTodoItem(ctx *gin.Context) {
 // @Param id path int true "id for search todo item"
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.TodoItem
+// @Success 200 {object} models.TodoItem
 // @Router /get [get]
 func GetTodoItemById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
-	todoItem := service.GetTodoItemById(id)
+	todoItem := services.GetTodoItemById(id)
 	ctx.JSON(200, todoItem)
 }
