@@ -46,7 +46,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/get": {
+        "/get/{id}": {
             "get": {
                 "description": "gets todolist item",
                 "consumes": [

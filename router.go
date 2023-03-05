@@ -22,7 +22,7 @@ type addTodoItemDto struct {
 // @Param todoItem body addTodoItemDto true "todo item for add"
 // @Accept json
 // @Produce json
-// @Success 200 int
+// @Success 200
 // @Router /add [post]
 func AddTodoItem(ctx *gin.Context) {
 	todoItem := addTodoItemDto{}
@@ -61,9 +61,13 @@ func UpdateTodoItem(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} models.TodoItem
-// @Router /get [get]
+// @Router /get/{id} [get]
 func GetTodoItemById(ctx *gin.Context) {
-	id, _ := strconv.Atoi(ctx.Param("id"))
+	id, err := strconv.Atoi(ctx.Param("id"))
+
+	if err != nil {
+		panic("GetTodoItemById:%v" + err.Error())
+	}
 
 	todoItem := services.GetTodoItemById(id)
 	ctx.JSON(200, todoItem)

@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strconv"
 	"todolist/common"
 	"todolist/models"
 )
@@ -28,5 +29,25 @@ func UpdateTodoItem(id int, name string, description string) {
 }
 
 func GetTodoItemById(id int) *models.TodoItem {
-	return nil
+	sql := fmt.Sprintf(`
+		SELECT [Name], [Description]
+  		FROM [dbo].[TodolistItems]
+  		where ID = '%s'`, strconv.Itoa(id))
+
+	var (
+		name        string
+		description string
+	)
+	err := common.DB.QueryRow(sql).Scan(&name, &description)
+
+	if err != nil {
+		panic("GetTodoItemById:%v" + err.Error())
+	}
+
+	var todoItem models.TodoItem
+	todoItem.ID = uint(id)
+	todoItem.Name = name
+	todoItem.Description = description
+
+	return &todoItem
 }

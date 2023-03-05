@@ -38,7 +38,7 @@ paths:
       summary: Add todo item
       tags:
       - TodoItem
-  /get:
+  /get/{id}:
     get:
       consumes:
       - application/json
