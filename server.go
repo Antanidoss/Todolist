@@ -26,7 +26,7 @@ func addRoutes(r *gin.Engine) {
 
 	todolistGroup.POST("/add", AddTodoItem)
 	todolistGroup.PUT("/update", UpdateTodoItem)
-	todolistGroup.GET("/get", GetTodoItemById)
+	todolistGroup.GET("/get/:id", GetTodoItemById)
 }
 
 func addSwagger(r *gin.Engine) {
